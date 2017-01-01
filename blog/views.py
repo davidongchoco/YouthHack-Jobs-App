@@ -4,13 +4,16 @@ from .models import Post
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from .forms import RegistrationForm
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 
-
-
+@login_required
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     return render(request, 'blog/post_list.html', {'posts': posts})
 
+@login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
@@ -58,4 +61,19 @@ def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
     return redirect('post_list')
+
+
+def register_page(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = User.objects.create_user(username=form.cleaned_data['username'],password=form.cleaned_data['password1'],email=form.cleaned_data['email'])
+            user.save()
+            return HttpResponseRedirect('blog/post_detail.html')
+    form = RegistrationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+
+
+
 
