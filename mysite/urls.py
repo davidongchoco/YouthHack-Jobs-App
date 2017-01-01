@@ -17,6 +17,8 @@ from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
 
+app_name = "home"
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^admin/password_reset/$', auth_views.password_reset, name='admin_password_reset'),

@@ -2,6 +2,8 @@ from django.conf.urls import url
 from . import views
 
 
+app_name = "blog"
+
 urlpatterns = [
     url(r'^$', views.post_list, name='post_list'),
     url(r'^post/(?P<pk>\d+)/$', views.post_detail, name='post_detail'),
@@ -11,4 +13,16 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/publish/$', views.post_publish, name='post_publish'),
 	url(r'^post/(?P<pk>\d+)/remove/$', views.post_remove, name='post_remove'),
 	url(r'^register/$', views.register_page, name='register_page'),
+	
+	url(r'^user/password/reset/$', 
+        'django.contrib.auth.views.password_reset', 
+        {'post_reset_redirect' : '/user/password/reset/done/'},
+        name="password_reset"),
+    (r'^user/password/reset/done/$',
+        'django.contrib.auth.views.password_reset_done'),
+    (r'^user/password/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 
+        'django.contrib.auth.views.password_reset_confirm', 
+        {'post_reset_redirect' : '/user/password/done/'}),
+    (r'^user/password/done/$', 
+        'django.contrib.auth.views.password_reset_complete'),
 ]

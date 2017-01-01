@@ -1,3 +1,4 @@
+from django.contrib.auth import forms
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Post
@@ -7,6 +8,8 @@ from django.contrib.auth import logout
 from .forms import RegistrationForm
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.contrib.auth.views import password_reset, password_reset_confirm
 
 @login_required
 def post_list(request):
@@ -72,6 +75,7 @@ def register_page(request):
             return HttpResponseRedirect('blog/post_detail.html')
     form = RegistrationForm()
     return render(request, 'registration/register.html', {'form': form})
+
 
 
 
